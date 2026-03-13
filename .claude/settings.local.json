@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet --version)",
+      "Bash(cd /Users/deanrao/Desktop/project/claude-workflow/WorkflowEngine && dotnet build WorkflowEngine.sln 2>&1)",
+      "Bash(dotnet test:*)",
+      "Bash(dotnet build:*)"
+    ]
+  }
+}

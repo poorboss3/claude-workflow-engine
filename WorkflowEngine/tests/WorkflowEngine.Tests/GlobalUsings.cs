@@ -1,0 +1,14 @@
+global using Xunit;
+global using FluentAssertions;
+global using Moq;
+global using MediatR;
+global using Microsoft.Extensions.DependencyInjection;
+global using WorkflowEngine.Domain.Entities;
+global using WorkflowEngine.Domain.Enums;
+global using WorkflowEngine.Domain.Common;
+global using WorkflowEngine.Domain.Exceptions;
+global using WorkflowEngine.Application.Commands.Approval;
+global using WorkflowEngine.Application.Commands.Submission;
+global using WorkflowEngine.Application.Services;
+global using WorkflowEngine.Tests.Helpers;
+global using WorkflowEngine.Tests.Fakes;
