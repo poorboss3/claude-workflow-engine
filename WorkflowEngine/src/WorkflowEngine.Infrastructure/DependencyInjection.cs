@@ -23,7 +23,7 @@ public static class DependencyInjection
         if (useInMemory)
         {
             services.AddDbContext<WorkflowDbContext>(opt =>
-                opt.UseInMemoryDatabase($"WorkflowTestDb_{Guid.NewGuid()}"));
+                opt.UseInMemoryDatabase("WorkflowDb"));
         }
         else
         {

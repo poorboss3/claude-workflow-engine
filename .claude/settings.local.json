@@ -4,7 +4,18 @@
       "Bash(dotnet --version)",
       "Bash(cd /Users/deanrao/Desktop/project/claude-workflow/WorkflowEngine && dotnet build WorkflowEngine.sln 2>&1)",
       "Bash(dotnet test:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(cd /Users/deanrao/Desktop/project/claude-workflow/WorkflowEngine && dotnet run --project src/WorkflowEngine.API/WorkflowEngine.API.csproj)",
+      "Bash(node -e \"\nconst fs = require\\('fs'\\);\nconst base = '/Users/deanrao/Desktop/project/claude-workflow/workflow-ui';\nconst files = [\n  'package.json',\n  'src/main.js',\n  'src/router/index.js',\n  'src/api/http.js',\n  'src/stores/userStore.js',\n  'src/stores/flowStore.js',\n];\nlet ok = true;\nfiles.forEach\\(f => {\n  const p = base + '/' + f;\n  const exists = fs.existsSync\\(p\\);\n  const size = exists ? fs.statSync\\(p\\).size : 0;\n  console.log\\(exists ? '✓' : '✗', f, exists ? size + ' bytes' : 'MISSING'\\);\n  if \\(!exists\\) ok = false;\n}\\);\nprocess.exit\\(ok ? 0 : 1\\);\n\")",
+      "Bash(node -e \"\nconst fs = require\\('fs'\\);\nconst base = '/Users/deanrao/Desktop/project/claude-workflow/workflow-ui';\nconst views = [\n  'src/views/ProcessListView.vue',\n  'src/views/ProcessCreateView.vue',\n  'src/views/FlowView.vue',\n  'src/views/TaskInboxView.vue',\n  'src/components/WorkflowDiagram.vue',\n];\nviews.forEach\\(f => {\n  const p = base + '/' + f;\n  const size = fs.statSync\\(p\\).size;\n  console.log\\('✓', f, size + ' bytes'\\);\n}\\);\n\")",
+      "Bash(cd /Users/deanrao/Desktop/project/claude-workflow/workflow-ui && npm install 2>&1 | tail -5)",
+      "Bash(npm install:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/api/v1/process-definitions)",
+      "Bash(curl -s -X POST http://localhost:5000/api/v1/process-definitions \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -H \"X-User-Id: user1\" \\\\\n  -d '{\n    \"Name\": \"请假申请流程\",\n    \"ProcessType\": \"LeaveRequest\",\n    \"NodeTemplatesJson\": \"[]\"\n  }')",
+      "Bash(curl -s -X POST http://localhost:5000/api/v1/process-definitions/431a8f10-5e15-4764-9d10-611739c81be1/activate \\\\\n  -H \"X-User-Id: user1\")",
+      "Bash(curl -s http://localhost:5000/api/v1/process-definitions \\\\\n  -H \"X-User-Id: user1\" | python3 -m json.tool)",
+      "Bash(curl -s http://localhost:5000/api/v1/process-definitions/431a8f10-5e15-4764-9d10-611739c81be1 \\\\\n  -H \"X-User-Id: user1\" | python3 -m json.tool)",
+      "Bash(curl -s http://localhost:5000/api/v1/tasks/pending \\\\\n  -H \"X-User-Id: user2\" | python3 -c \"\nimport sys,json\nd=json.load\\(sys.stdin\\)\ntasks=d['data']['items']\nfor t in tasks:\n    print\\(f'TaskId: {t[\\\\\"taskId\\\\\"]}'\\)\n    print\\(f'InstanceId: {t[\\\\\"instanceId\\\\\"]}'\\)\n    print\\(f'Process: {t[\\\\\"processName\\\\\"]} | BusinessKey: {t[\\\\\"businessKey\\\\\"]}'\\)\n    print\\(f'StepType: {t[\\\\\"stepType\\\\\"]} | PendingSince: {t[\\\\\"pendingSince\\\\\"]}'\\)\n    print\\(\\)\n\")"
     ]
   }
 }
