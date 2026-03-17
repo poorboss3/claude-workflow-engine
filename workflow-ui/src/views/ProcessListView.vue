@@ -377,8 +377,7 @@ async function handleSubmitInstance() {
     }
     if (submitForm.value.OnBehalfOf) preparePayload.OnBehalfOf = submitForm.value.OnBehalfOf
 
-    const prepareRes = await prepareSubmit(preparePayload)
-    const prepareResult = prepareRes.data
+    await prepareSubmit(preparePayload)
 
     const confirmedSteps = submitForm.value.steps.map((step, i) => ({
       StepIndex: i + 1,
@@ -397,8 +396,7 @@ async function handleSubmitInstance() {
     const submitRes = await submitProcess(submitPayload)
     const submitResult = submitRes.data
 
-    const instanceId = submitResult.instanceId || submitResult.InstanceId
-      || prepareResult?.instanceId || prepareResult?.InstanceId
+    const instanceId = submitResult?.id || submitResult?.Id
       || `local-${Date.now()}`
 
     flowStore.setInstanceData(instanceId, {

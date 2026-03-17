@@ -20,12 +20,23 @@ public static class DependencyInjection
         IConfiguration config,
         bool useInMemory = false)
     {
-        if (useInMemory)
+        var dbProvider = config.GetValue<string>("DatabaseProvider") ?? "InMemory";
+
+        if (useInMemory || string.Equals(dbProvider, "InMemory", StringComparison.OrdinalIgnoreCase))
         {
             services.AddDbContext<WorkflowDbContext>(opt =>
                 opt.UseInMemoryDatabase("WorkflowDb"));
+            useInMemory = true; // normalise flag so Redis/MQ branches below are consistent
         }
-        else
+        else if (string.Equals(dbProvider, "MySQL", StringComparison.OrdinalIgnoreCase))
+        {
+            var connStr = config.GetConnectionString("WorkflowDbMySql")
+                ?? throw new InvalidOperationException("ConnectionStrings:WorkflowDbMySql is required when DatabaseProvider=MySQL");
+            services.AddDbContext<WorkflowDbContext>(opt =>
+                opt.UseMySql(connStr, ServerVersion.AutoDetect(connStr),
+                    mysql => mysql.MigrationsAssembly("WorkflowEngine.Infrastructure")));
+        }
+        else // PostgreSQL (default)
         {
             services.AddDbContext<WorkflowDbContext>(opt =>
                 opt.UseNpgsql(config.GetConnectionString("WorkflowDb"),

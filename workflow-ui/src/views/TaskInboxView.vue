@@ -120,7 +120,7 @@
             </el-table-column>
             <el-table-column label="业务Key" min-width="140">
               <template #default="{ row }">
-                <el-tag type="info" size="small">{{ row.BusinessKey || row.businessKey }}</el-tag>
+                {{ row.BusinessKey || row.businessKey || '-' }}
               </template>
             </el-table-column>
             <el-table-column label="操作结果" width="110" align="center">
@@ -222,7 +222,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Refresh, Clock, Finished, View, Check, Close } from '@element-plus/icons-vue'
@@ -407,6 +407,12 @@ function formatDate(dateStr) {
     return dateStr
   }
 }
+
+watch(() => userStore.userId, () => {
+  pendingPage.value = 1
+  completedPage.value = 1
+  loadCurrentTab()
+})
 
 onMounted(loadPendingTasks)
 </script>

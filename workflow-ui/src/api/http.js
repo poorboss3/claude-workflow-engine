@@ -25,9 +25,21 @@ http.interceptors.request.use(
 )
 
 http.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Unwrap ApiResponse<T> envelope: { success, data, error }
+    const body = response.data
+    if (body && typeof body === 'object' && 'success' in body) {
+      if (!body.success) {
+        const msg = body.error?.message || '请求失败'
+        return Promise.reject(new Error(msg))
+      }
+      response.data = body.data
+    }
+    return response
+  },
   (error) => {
-    const msg = error.response?.data?.message
+    const msg = error.response?.data?.error?.message
+      || error.response?.data?.message
       || error.response?.data?.title
       || error.message
       || '请求失败'

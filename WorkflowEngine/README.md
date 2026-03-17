@@ -1,6 +1,6 @@
 # WorkflowEngine
 
-基于 ASP.NET Core 8 的 BPM 工作流引擎，实现提交、审批、退回、驳回、加签、会签、代理、委托等完整流程功能。
+基于 ASP.NET Core 9 的 BPM 工作流引擎，实现提交、审批、退回、驳回、加签、会签、代理、委托等完整流程功能。
 
 ## 项目结构
 
@@ -18,12 +18,12 @@ WorkflowEngine/
 ## 快速启动
 
 ### 前置依赖（生产模式）
-- PostgreSQL 14+
+- PostgreSQL 14+ 或 MySQL 8.0+
 - Redis 7+
 - RabbitMQ 3.12+
 
 ### 开发模式（无外部依赖）
-`appsettings.Development.json` 默认 `UseInMemoryDb: true`，使用 In-Memory 数据库和内存消息总线，**无需任何外部服务**。
+`appsettings.Development.json` 默认 `DatabaseProvider: "InMemory"`，使用 In-Memory 数据库和内存消息总线，**无需任何外部服务**。
 
 ```bash
 cd src/WorkflowEngine.API
@@ -33,11 +33,32 @@ dotnet run
 
 ### 生产部署
 
-1. 修改 `appsettings.json` 连接字符串
-2. 执行数据库初始化脚本
-```bash
-psql -U workflow_user -d workflow_db -f src/WorkflowEngine.Infrastructure/Persistence/Migrations/InitialCreate.sql
+1. 修改 `appsettings.json`，设置数据库提供程序及连接字符串：
+
+**使用 PostgreSQL：**
+```json
+"UseInMemoryDb": false,
+"DatabaseProvider": "PostgreSQL",
+"ConnectionStrings": {
+  "WorkflowDb": "Host=localhost;Port=5432;Database=workflow_db;Username=workflow_user;Password=workflow_pass"
+}
 ```
+
+**使用 MySQL：**
+```json
+"UseInMemoryDb": false,
+"DatabaseProvider": "MySQL",
+"ConnectionStrings": {
+  "WorkflowDbMySql": "Server=localhost;Port=3306;Database=workflow_db;User=workflow_user;Password=workflow_pass;"
+}
+```
+
+2. 执行 EF Core 数据库迁移
+```bash
+dotnet ef migrations add InitialCreate --project src/WorkflowEngine.Infrastructure --startup-project src/WorkflowEngine.API
+dotnet ef database update --project src/WorkflowEngine.Infrastructure --startup-project src/WorkflowEngine.API
+```
+
 3. 启动服务
 ```bash
 dotnet publish -c Release
