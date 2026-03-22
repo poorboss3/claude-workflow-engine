@@ -18,7 +18,9 @@
       "Bash(curl -s http://localhost:5000/api/v1/tasks/pending \\\\\n  -H \"X-User-Id: user2\" | python3 -c \"\nimport sys,json\nd=json.load\\(sys.stdin\\)\ntasks=d['data']['items']\nfor t in tasks:\n    print\\(f'TaskId: {t[\\\\\"taskId\\\\\"]}'\\)\n    print\\(f'InstanceId: {t[\\\\\"instanceId\\\\\"]}'\\)\n    print\\(f'Process: {t[\\\\\"processName\\\\\"]} | BusinessKey: {t[\\\\\"businessKey\\\\\"]}'\\)\n    print\\(f'StepType: {t[\\\\\"stepType\\\\\"]} | PendingSince: {t[\\\\\"pendingSince\\\\\"]}'\\)\n    print\\(\\)\n\")",
       "Bash(xargs basename:*)",
       "Bash(dotnet add:*)",
-      "Bash(lsof -ti:5000,3000,3001)"
+      "Bash(lsof -ti:5000,3000,3001)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
