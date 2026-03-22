@@ -23,6 +23,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Build
+      working-directory: workflow-ui
       run: |
         npm install
-        npx webpack
+        npm run build
